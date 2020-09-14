@@ -55,3 +55,37 @@
 //     console.log("Error!");
 //     break;
 // }
+
+// *****************ЦИКЛ while*****************
+// let num = 50;
+// while (num <= 55) {
+//   console.log(num);
+//   num++;
+// }
+
+// ************ЦИКЛ ====do=====**********************
+// let num = 50;
+// do {
+//   console.log(num);
+//   num++;
+// } while (num <= 55);
+
+// ***********ЦИКЛ =====for========*****************
+// for (let i = 1; i < 8; i++) {
+//   console.log(i);
+// }
+
+// let num = 50;
+// for (let i = 1; i < 8; i++) {
+//   console.log(num);
+//   num++;
+// }
+
+// for (let i = 1; i < 11; i++) {
+//   if (i === 7) {
+//     // break;
+//     continue;
+//     //   continue - дозволяє пропустити певне число (значення і т.п.).
+//   }
+//   console.log(i);
+// }
