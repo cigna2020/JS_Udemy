@@ -279,17 +279,278 @@ P.S. Функции вызывать не обязательно */
 
 // =============== Part 2 Lesson 19 =============***Callback****====================
 
-function learnJs(lang, callback) {
-    console.log(`I'm learning ${lang}`);
-    callback();
-}
+// function learnJs(lang, callback) {
+//     console.log(`I'm learning ${lang}`);
+//     callback();
+// }
 
-// learnJs('JavaScript', function () {
+// // learnJs('JavaScript', function () {
+// //     console.log('Some text');
+// // });
+
+// function done() {
 //     console.log('Some text');
+// }
+
+// learnJs('JavaScript', done);
+
+
+// =============== Part 2 Lesson 20 =============***Object****====================
+
+// const obj = {
+//     name: 'test',
+//     width: 1024,
+//     height: 1024,
+//     colors: {
+//         border: 'black',
+//         bg: 'red'
+//     },
+//     makeTest: function () {
+//         console.log('Test');
+//     }
+// };
+
+// const { border, bg } = obj.colors;
+// console.log(bg);
+
+// delete obj.name;
+// console.log(obj);
+
+// for (let key in obj) {
+//     console.log(`Свойство ${key} имеет значение: ${obj[key]}`);
+// }
+
+// for (let key in obj) {
+//     if (typeof (obj[key]) === 'object') {
+//         for (let i in obj[key]) {
+//             console.log(`Свойство ${i} имеет значение ${obj[key][i]}`);
+//         }
+//     } else {
+//         console.log(`Свойство ${key} имеет значение ${obj[key]}`);
+//     }
+// }
+// let count = 0;
+// for (let key in obj) {
+//     count++;
+// }
+// console.log(count);
+
+// console.log(Object.keys(obj).length);
+
+// obj.makeTest();
+
+
+// =============== Part 2 Lesson 21 =============***Масвивы array****====================
+
+// const arr = [31, 2, 39, 69, 8];
+// arr.sort(compareNum);
+// console.log(arr);
+
+// function compareNum(a, b) {
+//     return a - b;
+// }
+
+// arr.pop();
+// arr.push(10);
+// arr.shift();
+// arr.unshift(0);
+
+// for (let i = 0; i < arr.length; i++) {
+//     console.log(arr[i]);
+// }
+
+// for (let key of arr) {
+//     console.log(key);
+// }
+
+// arr[99] = 0;
+// console.log(arr.length);
+// console.log(arr);
+
+// arr.forEach(function (item, i, arr) {
+//     console.log(`${i + 1}: ${item} in Massiv ${arr}`);
 // });
 
-function done() {
-    console.log('Some text');
-}
+// const str = prompt('', '');
+// const products = str.split(', ');
+// products.sort();
+// console.log(products.join('; '));
 
-learnJs('JavaScript', done);
+
+// =============== Part 2 Lesson 22 ===============================
+
+// const obj = {
+//     a: 5,
+//     b: 1,
+//     c: {
+//         x: 7,
+//         y: 4
+//     }
+// };
+
+// const copy = obj;
+// console.log(copy);
+// copy.a = 10;
+// console.log(copy);
+// console.log(obj);
+
+// function copy(mainObj) {
+//     let objCopy = {};
+//     for (let key in mainObj) {
+//         objCopy[key] = mainObj[key];
+//     }
+//     return objCopy;
+// }
+// const newObj = copy(obj);
+// console.log(newObj);
+
+// const add = {
+//     d: 17,
+//     e: 20
+// };
+// console.log(Object.assign(obj, add));
+// console.log(Object.assign({}, add)); //Створює новий об'єкт (окрім глибокої копії)!!!!
+
+// const oldArray = ['a', 'b', 'c'];
+// const newArray = oldArray.slice(''); //Створює новий об'єкт!!!!
+// newArray[0] = 'd';
+// console.log(oldArray);
+// console.log(newArray);
+
+// ------------- spread оператор:
+
+// const video = ['youtube', 'vimeo', 'rutube'],
+//     blogs = ['wordpress', 'livejournal', 'bloger'],
+//     internet = [...video, ...blogs, 'vk', 'facebook'];
+// console.log(internet);
+
+// function someFunc(a, b, c) {
+//     console.log(a);
+//     console.log(b);
+//     console.log(c);
+// }
+// const num = [3, 5, 7];
+// someFunc(...num);
+
+// const num = [3, 5, 7];
+// const newNum = [...num];   //Створює новий об'єкт!!!! 
+// console.log(newNum);  
+
+// const str = 'abcd';
+// const newStr = new String(str);
+// console.log(typeof (str));
+// console.log(typeof (newStr));
+
+// const soldier = {
+//     health: 400,
+//     armor: 200
+// };
+
+// const john = {
+//     health: 100
+// };
+
+// john.__proto__ = soldier;
+// Object.setPrototypeOf(john, soldier);
+// const john = Object.create(soldier);
+// john.health = 100;
+// console.log(john);
+// console.log(john.health);
+
+
+
+// =============== Part 2 Lesson 24 ===============================
+
+
+const personalMovieDB = {
+    count: 0,
+    movies: {},
+    actors: {},
+    genres: [],
+    privat: false,
+    start: function () {
+        personalMovieDB.count = +prompt('Сколько фильмов вы уже посмотрели?', '');
+
+        while (personalMovieDB.count == '' || personalMovieDB.count == null || isNaN(personalMovieDB.count)) {
+            personalMovieDB.count = +prompt('Введите число!', '');
+        }
+    },
+    rememberMyFilms: function () {
+        for (let i = 0; i < 2; i++) {
+            const a = prompt('Один из последних просмотренных фильмов?', ''),
+                b = prompt('На сколько оцените его?', '');
+
+            if (a != null && b != null && a != '' && b != '' && a.length < 50 && b.length < 2) {
+                personalMovieDB.movies[a] = b;
+                console.log('done');
+            } else {
+                console.log('error');
+                i--;
+            }
+        }
+    },
+    detectPersonalLevel: function () {
+        if (personalMovieDB.count < 10) {
+            console.log("Просмотрено довольно мало фильмов");
+        } else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
+            console.log("Вы классический зритель");
+        } else if (personalMovieDB.count >= 30) {
+            console.log("Вы киноман");
+        } else {
+            console.log("Произошла ошибка");
+        }
+    },
+    rememberMyFilms: function () {
+        for (let i = 0; i < 2; i++) {
+            const a = prompt('Один из последних просмотренных фильмов?', ''),
+                b = prompt('На сколько оцените его?', '');
+
+            if (a != null && b != null && a != '' && b != '' && a.length < 50 && b.length < 2) {
+                personalMovieDB.movies[a] = b;
+                console.log('done');
+            } else {
+                console.log('error');
+                i--;
+            }
+        }
+    },
+    showMyDB: function (hidden) {
+        if (!hidden) {
+            console.log(personalMovieDB);
+        }
+    },
+    toggleVisibleMyDB: function () {
+        if (personalMovieDB.privat == true) {
+            personalMovieDB.privat = false;
+        } else {
+            personalMovieDB.privat = true;
+        }
+    },
+    writeYourGenres: function () {
+        // for (let i = 1; i <= 3; i++) {
+        //     let genre = prompt(`Ваш любимый жанр под номером ${i}`);
+        //     if (genre == '' || genre == null) {
+        //         console.log('Do again!');
+        //         i--;
+        //     } else {
+        //         personalMovieDB.genres[i - 1] = genre;
+        //     }
+        // }
+        // personalMovieDB.genres.forEach((item, i) => {
+        //     console.log(`Любимый жанр ${i + 1} - это ${item}`);
+        // });
+        for (let i = 1; i < 2; i++) {
+            let genre = prompt(`Ваши любимые жанры через запятую`);
+            if (genre == '' || genre == null) {
+                console.log('Do again!');
+                i--;
+            } else {
+                personalMovieDB.genres = genre.split(', ');
+            }
+        }
+        personalMovieDB.genres.forEach((item, i) => {
+            console.log(`Любимый жанр ${i + 1} - это ${item}`);
+        });
+    }
+};
+
