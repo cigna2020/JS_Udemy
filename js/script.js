@@ -556,21 +556,56 @@ P.S. Функции вызывать не обязательно */
 
 // =============== Part 2 Lesson 25 ===============================
 
-function hello() {
-    console.log('Hello World!');
-}
-hello();
+// function hello() {
+//     console.log('Hello World!');
+// }
+// hello();
 
-function hi() {
-    console.log('Say HI!');
-}
-hi();
+// function hi() {
+//     console.log('Say HI!');
+// }
+// hi();
 
-const arr = [1, 14, 4, 30, 54],
-    sorted = arr.sort(compareNum);
+// const arr = [1, 14, 4, 30, 54],
+//     sorted = arr.sort(compareNum);
 
-function compareNum(a, b) {
-    return a - b;
-}
+// function compareNum(a, b) {
+//     return a - b;
+// }
 
-console.log(sorted);
+// console.log(sorted);
+
+// =============== Part 2 Lesson 26 Динамическая типизация ===============================
+
+// ***********To String:*************
+// 1. toString
+// console.log(typeof (String(null)));
+// console.log(typeof (String(4)));
+
+// 2. Конкатенация (сложение)
+// console.log(typeof (4 + ''));
+// const fontSize = 26 + 'px';
+
+// ***********To Nubmer:*************
+// 1. to Number
+// console.log(typeof (Number('4')));
+
+// 2. Унарный плюс
+// console.log(typeof (+'4'));
+
+// 3. parseInt
+// console.log(typeof (parseInt('15px', 10)));
+
+// ***********To Boolean:*************
+// 1. Пустота или ноль (0) == false
+// 0, '', null, undefined, NaN == false
+
+// 2.Boolean
+// console.log(typeof (Boolean('4')));
+
+// 3. !!
+// console.log(typeof (!!'4'));
+
+
+
+
