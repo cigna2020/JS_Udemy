@@ -1,71 +1,50 @@
+/* Задания на урок:
+
+1) Удалить все рекламные блоки со страницы (правая часть сайта)
+
+2) Изменить жанр фильма, поменять "комедия" на "драма"
+
+3) Изменить задний фон постера с фильмом на изображение "bg.jpg". Оно лежит в папке img.
+Реализовать только при помощи JS
+
+4) Список фильмов на странице сформировать на основании данных из этого JS файла.
+Отсортировать их по алфавиту 
+
+5) Добавить нумерацию выведенных фильмов */
+
 'use strict';
 
-// const box = document.getElementById('box');
-// console.log(box);
+const movieDB = {
+    movies: [
+        "Логан",
+        "Лига справедливости",
+        "Ла-ла лэнд",
+        "Одержимость",
+        "Скотт Пилигрим против..."
+    ]
+};
 
-// const btns = document.getElementsByTagName('button');
-// console.log(btns);
+const advertising = document.querySelectorAll('.promo__adv img'),
+    poster = document.querySelector('.promo__bg'),
+    genre = poster.querySelector('.promo__genre'),
+    movieItem = document.querySelectorAll('.promo__interactive-item'),
+    movieList = document.querySelector('.promo__interactive-list');
 
-// const circle = document.getElementsByClassName('circle');
-// console.log(circle);
-
-// const hearts = document.querySelectorAll('.heart');
-// // console.log(hearts);
-// hearts.forEach(item => {
-//     console.log(item);
-// });
-
-// const hearts = document.querySelector('.heart');
-// console.log(hearts);
-
-
-// ================== Lesson 29 ===========================
-
-const box = document.getElementById('box'),
-    btns = document.getElementsByTagName('button'),
-    circle = document.getElementsByClassName('circle'),
-    wrapper = document.querySelector('.wrapper'),
-    hearts = wrapper.querySelectorAll('.heart'),
-    oneHeart = wrapper.querySelector('.heart');
-
-box.style.backgroundColor = 'green';
-box.style.cssText = 'background-color: green; width: 500px';
-box.style.width = '500px';
-btns[1].style.borderRadius = '100%';
-
-for (let i = 0; i < hearts.length; i++) {
-    hearts[i].style.backgroundColor = 'green';
-}
-
-hearts.forEach(item => {
-    item.style.backgroundColor = 'blue';
+advertising.forEach(item => {
+    item.remove();
 });
 
-const text = document.createTextNode('Some text');
-const div = document.createElement('div');
-div.classList.add('black');
-
-wrapper.append(div);
-
-document.body.append(div);
-
-document.querySelector('.wrapper').append(div);
-
-wrapper.appendChild(div); // OLD style
-
-wrapper.prepend(div);
-
-hearts[1].before(div);
-hearts[1].after(div);
-wrapper.insertBefore(div, hearts[1]); // OLD style
-
-btns[1].remove();
-wrapper.removeChild(hearts[1]); // OLD style
-
-hearts[1].replaceWith(btns[1]);
-wrapper.replaceChild(btns[1], hearts[1]); // OLD style
-
-div.innerHTML = '<h1>some text</h1>';
-div.insertAdjacentHTML('beforebegin', '<h2>Hello!</h2>');
-
-div.textContent = 'Hello!';
+genre.textContent = "Drama";
+poster.style.backgroundImage = "url('/img/bg.jpg')";
+movieItem.forEach(item => {        //це якщо querySelectorAll, але тоді все видалиться, а не очиститься
+    item.remove();
+});
+// movieList.innerHTML = '';
+movieDB.movies.sort();
+movieDB.movies.forEach((film, i) => {
+    movieList.innerHTML += `
+        <li class="promo__interactive-item">${i + 1 + '.'} ${film}
+            <div class="delete"></div>
+        </li>
+`
+});
