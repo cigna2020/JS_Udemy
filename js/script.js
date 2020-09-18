@@ -96,5 +96,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+// ========================== Lesson 34 ==== события на мобильных  ===================================
 
+// 1. touchstart
+// 2. touchmove
+// 3. touchend
+// 4. touchenter
+// 5. touchleave
+// 6. touchcancel
 
+window.addEventListener('DOMContentLoaded', () => {
+    const box = document.querySelector('.header__logo');
+    box.addEventListener('touchstar', (e) => {
+        e.preventDefault();
+        console.log('start');
+    });
+
+    box.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        console.log('Move');
+    });
+
+    box.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        console.log('end');
+        console.log(e.touches);
+    });
+});
+
+//  Свойсват "е":
+// touches - количество пальцев на экране;
+// targetTouches - количество пальцев на ЭЛЕМЕНТЕ;
+// changedTouches - количество пальцев участвующих в текущем событии;
