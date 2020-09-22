@@ -91,4 +91,59 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setClock('.timer', deadline);
+
+    // ============= Modal Window ========================
+
+    const modalTriger = document.querySelectorAll('[data-modal]'),
+        modal = document.querySelector('.modal'),
+        modalCloseBtn = document.querySelector('[data-close]');
+
+    modalTriger.forEach(btn => {                // варіант з All
+        btn.addEventListener('click', () => {
+            modal.classList.add('show');
+            modal.classList.remove('hide');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    // modalTriger.addEventListener('click', () => {           //варіант лише для одного селектора, тобто q...Selec... БЕЗ All
+    //     // modal.style.display = 'block';
+    //     //modal.classList.toggle('show');   // Варіант з тоггле
+    //     modal.classList.add('show');
+    //     modal.classList.remove('hide');
+    //     document.body.style.overflow = 'hidden';
+    // });
+
+    function closeModal() {
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    };
+
+    modalCloseBtn.addEventListener('click', closeModal);
+
+    // modalCloseBtn.addEventListener('click', () => {
+    // modal.style.display = 'none';
+    //modal.classList.toggle('show');   // Варіант з тоггле
+
+    // modal.classList.add('hide');
+    // modal.classList.remove('show');
+    // document.body.style.overflow = '';
+    // });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            // modal.classList.add('hide');
+            // modal.classList.remove('show');
+            // document.body.style.overflow = '';
+            closeModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+
 });
