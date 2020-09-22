@@ -98,13 +98,23 @@ document.addEventListener('DOMContentLoaded', () => {
         modal = document.querySelector('.modal'),
         modalCloseBtn = document.querySelector('[data-close]');
 
+    function openModal() {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+        clearInterval(openModalId);                      // Если пользователь сам открыл мод.окно, что-бы второй раз не появлялось по setTimeout
+    }
+
+
     modalTriger.forEach(btn => {                // варіант з All
         btn.addEventListener('click', () => {
-            modal.classList.add('show');
-            modal.classList.remove('hide');
-            document.body.style.overflow = 'hidden';
+            // modal.classList.add('show');
+            // modal.classList.remove('hide');
+            // document.body.style.overflow = 'hidden';
+            openModal();
         });
     });
+
 
     // modalTriger.addEventListener('click', () => {           //варіант лише для одного селектора, тобто q...Selec... БЕЗ All
     //     // modal.style.display = 'block';
@@ -118,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.add('hide');
         modal.classList.remove('show');
         document.body.style.overflow = '';
-    };
+    }
 
     modalCloseBtn.addEventListener('click', closeModal);
 
@@ -145,5 +155,21 @@ document.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }
     });
+
+    const openModalId = setTimeout(openModal, 3000);   // Вызов функции открытия модального окна через промежуток времени.
+
+    // window.addEventListener('scroll', () => {           // Если доскролить до конца страницы, тогда появляется мод.окно. Но оно будет появлятся каждый раз
+    //     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+    //         openModal();
+    //     }
+    // });
+
+    function showModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);   // щоб більше не повторювалося, аргументи відповідають аргументам window.addEventList...
+        }
+    }
+    window.addEventListener('scroll', showModalByScroll);
 
 });
