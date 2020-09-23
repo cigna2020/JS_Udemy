@@ -95,8 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============= Modal Window ========================
 
     const modalTriger = document.querySelectorAll('[data-modal]'),
-        modal = document.querySelector('.modal'),
-        modalCloseBtn = document.querySelector('[data-close]');
+        modal = document.querySelector('.modal');
+    // modalCloseBtn = document.querySelector('[data-close]');            // не применяется к динамически созданным элементам, урок 54
 
     function openModal() {
         modal.classList.add('show');
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     }
 
-    modalCloseBtn.addEventListener('click', closeModal);
+    // modalCloseBtn.addEventListener('click', closeModal);         // не применяется к динамически созданным элементам, урок 54
 
     // modalCloseBtn.addEventListener('click', () => {
     // modal.style.display = 'none';
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // });
 
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+        if (e.target === modal || e.target.getAttribute('data-close') == '') {
             // modal.classList.add('hide');
             // modal.classList.remove('show');
             // document.body.style.overflow = '';
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const openModalId = setTimeout(openModal, 3000);   // Вызов функции открытия модального окна через промежуток времени.
+    const openModalId = setTimeout(openModal, 50000);   // Вызов функции открытия модального окна через промежуток времени (50 sec).
 
     // window.addEventListener('scroll', () => {           // Если доскролить до конца страницы, тогда появляется мод.окно. Но оно будет появлятся каждый раз
     //     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const forms = document.querySelectorAll('form');
 
     const message = {
-        load: 'Идет загрузка...',
+        load: 'img/spinner.svg',
         success: 'Спасибо! Мы с вами связжемся',
         failure: 'Что-то пошло не так...'
     };
@@ -269,10 +269,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();                             // відміна стандартної поведінки браузера (перезавантаження сторінки)
-            const statusMessage = document.createElement('div');
-            statusMessage.classList.add('status');
-            statusMessage.textContent = message.load;
-            form.append(statusMessage);
+            // const statusMessage = document.createElement('div');     // закомент. так-как в load текст заменили на картинку
+            // statusMessage.classList.add('status');                   // закомент. так-как в load текст заменили на картинку
+            // statusMessage.textContent = message.load;                   // закомент. так-как в load текст заменили на картинку
+
+            const statusMessage = document.createElement('img');           // 'div' change on 'img'
+            statusMessage.src = message.load;                               // add src for image
+            statusMessage.style.cssText = `
+            display: block;
+            margin: 0 auto;
+            `;
+            // form.append(statusMessage);                  // закомент. так-как спинер сдвигает блоки верстки влево
+            form.insertAdjacentElement('afterend', statusMessage);
 
             const request = new XMLHttpRequest();
             request.open('POST', 'server.php');                          // настройка запроса
@@ -299,16 +307,18 @@ document.addEventListener('DOMContentLoaded', () => {
             request.addEventListener('load', () => {
                 if (request.status === 200) {
                     console.log(request.response);
-                    statusMessage.textContent = message.success;
+                    // statusMessage.textContent = message.success;     // закомент. так-как добавлено модал.окно с благодарностью
+                    showThanksModal(message.success);                   // добавлено, для отображен. модал.окно с благодарностью
                     form.reset();
-                    setTimeout(() => {
-                        statusMessage.remove();
-                    }, 2000);
+                    // setTimeout(() => {                               // закомент. так-как добавлено модал.окно с благодарностью
+                    statusMessage.remove();
+                    // }, 2000);
                     setTimeout(() => {
                         closeModal();
                     }, 3000);
                 } else {
-                    statusMessage.textContent = message.failure;
+                    // statusMessage.textContent = message.failure;     // закомент. так-как добавлено модал.окно с благодарностью
+                    showThanksModal(message.failure);
                 }
             });
 
@@ -316,4 +326,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+    // ============== Оповещение пользователя об отправке (спинер, окна) =================== lesson 54
+
+    function showThanksModal(message) {
+        const prevModalDialog = document.querySelector('.modal__dialog');
+
+        prevModalDialog.classList.add('hide');
+        openModal();
+
+        const thanksModal = document.createElement('div');
+        thanksModal.classList.add('modal__dialog');
+        thanksModal.innerHTML = `
+        <div class="modal__content">
+        <div class="modal__close" data-close>&times;</div>
+        <div class="modal__title">${message}</div>
+        </div>
+        `;
+
+        document.querySelector('.modal').append(thanksModal);
+        // modal.append(thanksModal);
+
+        setTimeout(() => {
+            thanksModal.remove();
+            prevModalDialog.classList.add('show');
+            prevModalDialog.classList.remove('hide');
+            closeModal();
+        }, 4000);
+    }
 });
