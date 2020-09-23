@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // const openModalId = setTimeout(openModal, 3000);   // Вызов функции открытия модального окна через промежуток времени.
+    const openModalId = setTimeout(openModal, 3000);   // Вызов функции открытия модального окна через промежуток времени.
 
     // window.addEventListener('scroll', () => {           // Если доскролить до конца страницы, тогда появляется мод.окно. Но оно будет появлятся каждый раз
     //     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -251,5 +251,69 @@ document.addEventListener('DOMContentLoaded', () => {
         'menu__item'
     ).render();
 
+
+    // ============== SEND info from Forms =================== lesson 53
+
+    const forms = document.querySelectorAll('form');
+
+    const message = {
+        load: 'Идет загрузка...',
+        success: 'Спасибо! Мы с вами связжемся',
+        failure: 'Что-то пошло не так...'
+    };
+
+    forms.forEach(item => {
+        postData(item);
+    });
+
+    function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();                             // відміна стандартної поведінки браузера (перезавантаження сторінки)
+            const statusMessage = document.createElement('div');
+            statusMessage.classList.add('status');
+            statusMessage.textContent = message.load;
+            form.append(statusMessage);
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'server.php');                          // настройка запроса
+
+            // request.setRequestHeader('Content-type', 'multipart/form-data');     //XMLHttpRequest + FormData - автоматически определяют эти данные
+            request.setRequestHeader('Content-type', 'multipart/json');     //При отправке данных в формате json setRequestHeader нужен
+
+            const formData = new FormData(form);
+
+
+            // Конвертация данных formData в формат json
+            const object = {};
+            formData.forEach(function (value, key) {        //json
+                object[key] = value;                        //json
+            });                                             //json
+
+            const json = JSON.stringify(object);            //json
+            request.send(json);                             //json
+            // ==============================================
+
+
+            // request.send(formData);                         // Закоментирован при конвертации в json
+
+            request.addEventListener('load', () => {
+                if (request.status === 200) {
+                    console.log(request.response);
+                    statusMessage.textContent = message.success;
+                    form.reset();
+                    setTimeout(() => {
+                        statusMessage.remove();
+                    }, 2000);
+                    setTimeout(() => {
+                        closeModal();
+                    }, 3000);
+                } else {
+                    statusMessage.textContent = message.failure;
+                }
+            });
+
+
+        });
+    }
 
 });
