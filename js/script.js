@@ -218,38 +218,87 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
+    const getResource = async (url) => {             // async - означает, что внутри будет асинхронный код. ВСЕГДА используется с await
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+        }
+        return await res.json();
+    };
+
+    getResource('http://localhost:3000/menu')
+        .then(data => {
+            data.forEach(({ img, altimg, title, descr, price }) => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+            });
+        });
+
+    // Формируем верстку (код выше) на лету без создания классов (new MenuCard)
+    // getResource('http://localhost:3000/menu')
+    //     .then(data => createCard(data));
+
+    // function createCard(data) {
+    //     data.forEach(({ img, altimg, title, descr, price }) => {
+    //         const element = document.createElement('div');
+
+    //         element.classList.add('menu__item');
+
+    //         element.innerHTML = `
+    //         <img src=${img} alt=${altimg} />
+    //         <h3 class="menu__item-subtitle">${title}</h3>
+    //         <div class="menu__item-descr">
+    //           ${descr}
+    //         </div>
+    //         <div class="menu__item-divider"></div>
+    //         <div class="menu__item-price">
+    //           <div class="menu__item-cost">Цена:</div>
+    //           <div class="menu__item-total"><span>${price}</span> грн/день</div>
+    //         </div>
+    //     `;
+
+    //         document.querySelector('.menu .container').append(element);
+    //     });
+    // }
+
+
+
+
+
     // const div = new MenuCard();
     // div.render();
 
     // Можно без создания переменной
-    new MenuCard(
-        'img/tabs/vegy.jpg',
-        'vegy',
-        'Меню "Фитнес"',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-        9,
-        '.menu .container',
-    ).render();
 
-    new MenuCard(
-        'img/tabs/elite.jpg',
-        'elite',
-        'Меню “Премиум”',
-        ' В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд.Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-        14,
-        '.menu .container',
-        'menu__item'
-    ).render();
+    // new MenuCard(                            // Заком., так-как все это делает getResource (выше)
+    //     'img/tabs/vegy.jpg',
+    //     'vegy',
+    //     'Меню "Фитнес"',
+    //     'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+    //     9,
+    //     '.menu .container',
+    // ).render();
 
-    new MenuCard(
-        'img/tabs/post.jpg',
-        'post',
-        'Меню "Постное"',
-        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
-        21,
-        '.menu .container',
-        'menu__item'
-    ).render();
+    // new MenuCard(
+    //     'img/tabs/elite.jpg',
+    //     'elite',
+    //     'Меню “Премиум”',
+    //     ' В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд.Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+    //     14,
+    //     '.menu .container',
+    //     'menu__item'
+    // ).render();
+
+    // new MenuCard(
+    //     'img/tabs/post.jpg',
+    //     'post',
+    //     'Меню "Постное"',
+    //     'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
+    //     21,
+    //     '.menu .container',
+    //     'menu__item'
+    // ).render();
 
 
     // ============== SEND info from Forms =================== lesson 53
@@ -263,10 +312,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     });
 
-    function postData(form) {
+    const postData = async (url, data) => {             // async - означает, что внутри будет асинхронный код. ВСЕГДА используется с await
+        const res = await fetch(url, {                  // await - означает что (прим. return-у) нужно дождатся выполнения этой операции (по стандарту срок ожидание до 30 сек.)
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: data
+        });
+        return await res.json();
+    };
+
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();                             // відміна стандартної поведінки браузера (перезавантаження сторінки)
             // const statusMessage = document.createElement('div');     // закомент. так-как в load текст заменили на картинку
@@ -293,27 +354,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             // Конвертация данных formData в формат json         
-            const object = {};                            // заком., когда используем fetch без json
-            formData.forEach(function (value, key) {        //json
-                object[key] = value;                        //json
-            });                                             //json
+            // const object = {};                            // заком., когда используем fetch без json
+            // formData.forEach(function (value, key) {        //json
+            //     object[key] = value;                        //json
+            // });                                             //json
 
-            const json = JSON.stringify(object);            //json
+            // const json = JSON.stringify(object);            //json
             // request.send(json);                             //json
+
+            // Новый метод конвертации
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
             // ==============================================
 
 
             // request.send(formData);                         // Закоментирован при конвертации в json
 
-            fetch('server.php', {                       // отрпавляет данные, собранные с помощью FormData
-                method: 'POST',
-                // body: formData,                      // Закоментирован при конвертации в json
-                body: json,                  //json
-                headers: {                               // Нужен, когда отправляем в json формате
-                    'Content-type': 'multipart/json'
-                }
-            })
-                .then(data => data.text())
+            // fetch('server.php', {                       // отрпавляет данные, собранные с помощью FormData   //заком., добавили функции postData
+            //     method: 'POST',
+            //     // body: formData,                      // Закоментирован при конвертации в json
+            //     // body: json,                  //json
+            //     headers: {                               // Нужен, когда отправляем в json формате
+            //         'Content-type': 'multipart/json'
+            //     },
+            //     body: JSON.stringify(object)
+            // })
+            // postData('http://localhost:3000/requests', JSON.stringify(object))   // заком., используется новый метод конвертации
+            // .then(data => data.text())       // заком., трансформация происходит на этапе postData
+            postData('http://localhost:3000/requests', json)
+
                 .then(data => {
                     console.log(data);
                     showThanksModal(message.success);
@@ -342,6 +410,8 @@ document.addEventListener('DOMContentLoaded', () => {
             //         showThanksModal(message.failure);
             //     }
             // });
+
+
         });
     }
 
@@ -374,10 +444,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     }
 
-    fetch('db.json').then(data => data.json()).then(res => console.log(res));
-
-
-
     // fetch('https://jsonplaceholder.typicode.com/posts', {                // Пример
     //     method: 'POST',  
     //     body: JSON.stringify({ name: 'Alex' }),
@@ -387,4 +453,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // })
     //     .then(response => response.json())
     //     .then(json => console.log(json));
+
+    // fetch('db.json')
+    // fetch(' http://localhost:3000/menu')         //Проверка работы БД
+    //     .then(data => data.json())
+    //     .then(res => console.log(res));
+
+
 });
