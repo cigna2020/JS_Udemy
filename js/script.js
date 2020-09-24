@@ -280,47 +280,68 @@ document.addEventListener('DOMContentLoaded', () => {
             margin: 0 auto;
             `;
             // form.append(statusMessage);                  // закомент. так-как спинер сдвигает блоки верстки влево
-            form.insertAdjacentElement('afterend', statusMessage);
+            form.insertAdjacentElement('afterend', statusMessage);      //размещаем спинер перед концом (внизу)
 
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');                          // настройка запроса
+            // const request = new XMLHttpRequest();                                    //заком., так-как используем fetch используем fetch
+            // request.open('POST', 'server.php');                          // настройка запроса  // заком., так-как используем fetch
+
 
             // request.setRequestHeader('Content-type', 'multipart/form-data');     //XMLHttpRequest + FormData - автоматически определяют эти данные
-            request.setRequestHeader('Content-type', 'multipart/json');     //При отправке данных в формате json setRequestHeader нужен
+            // request.setRequestHeader('Content-type', 'multipart/json');     //При отправке данных в формате json setRequestHeader нужен   // заком., так-как используем fetch
 
-            const formData = new FormData(form);
+            const formData = new FormData(form);            //соберает все данные с формы
 
 
-            // Конвертация данных formData в формат json
-            const object = {};
+            // Конвертация данных formData в формат json         
+            const object = {};                            // заком., когда используем fetch без json
             formData.forEach(function (value, key) {        //json
                 object[key] = value;                        //json
             });                                             //json
 
             const json = JSON.stringify(object);            //json
-            request.send(json);                             //json
+            // request.send(json);                             //json
             // ==============================================
 
 
             // request.send(formData);                         // Закоментирован при конвертации в json
 
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    // statusMessage.textContent = message.success;     // закомент. так-как добавлено модал.окно с благодарностью
-                    showThanksModal(message.success);                   // добавлено, для отображен. модал.окно с благодарностью
-                    form.reset();
-                    // setTimeout(() => {                               // закомент. так-как добавлено модал.окно с благодарностью
-                    statusMessage.remove();
-                    // }, 2000);
-                    setTimeout(() => {
-                        closeModal();
-                    }, 3000);
-                } else {
-                    // statusMessage.textContent = message.failure;     // закомент. так-как добавлено модал.окно с благодарностью
-                    showThanksModal(message.failure);
+            fetch('server.php', {                       // отрпавляет данные, собранные с помощью FormData
+                method: 'POST',
+                // body: formData,                      // Закоментирован при конвертации в json
+                body: json,                  //json
+                headers: {                               // Нужен, когда отправляем в json формате
+                    'Content-type': 'multipart/json'
                 }
-            });
+            })
+                .then(data => data.text())
+                .then(data => {
+                    console.log(data);
+                    showThanksModal(message.success);
+                    form.reset();
+                    statusMessage.remove();
+                }).catch(() => {
+                    showThanksModal(message.failure);
+                }).finally(() => {
+                    form.reset();
+                });
+
+            // request.addEventListener('load', () => {                     // заком., так-как используем fetch
+            //     if (request.status === 200) {
+            //         console.log(request.response);
+            //         // statusMessage.textContent = message.success;     // закомент. так-как добавлено модал.окно с благодарностью
+            //         showThanksModal(message.success);                   // добавлено, для отображен. модал.окно с благодарностью
+            //         form.reset();
+            //         // setTimeout(() => {                               // закомент. так-как добавлено модал.окно с благодарностью
+            //         statusMessage.remove();
+            //         // }, 2000);
+            //         setTimeout(() => {
+            //             closeModal();
+            //         }, 3000);
+            //     } else {
+            //         // statusMessage.textContent = message.failure;     // закомент. так-как добавлено модал.окно с благодарностью
+            //         showThanksModal(message.failure);
+            //     }
+            // });
 
 
         });
@@ -354,4 +375,14 @@ document.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 4000);
     }
+
+    // fetch('https://jsonplaceholder.typicode.com/posts', {                // Пример
+    //     method: 'POST',  
+    //     body: JSON.stringify({ name: 'Alex' }),
+    //     headers: {
+    //         'Content-type': 'application/json'
+    //     }
+    // })
+    //     .then(response => response.json())
+    //     .then(json => console.log(json));
 });
