@@ -342,8 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
             //         showThanksModal(message.failure);
             //     }
             // });
-
-
         });
     }
 
@@ -375,6 +373,10 @@ document.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 4000);
     }
+
+    fetch('db.json').then(data => data.json()).then(res => console.log(res));
+
+
 
     // fetch('https://jsonplaceholder.typicode.com/posts', {                // Пример
     //     method: 'POST',  
