@@ -228,9 +228,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return await res.json();
     };
 
-    getResource('http://localhost:3000/menu')
+    // getResource('http://localhost:3000/menu')                            // Заком. при использовании библ. axios
+    //     .then(data => {
+    //         data.forEach(({ img, altimg, title, descr, price }) => {
+    //             new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+    //         });
+    //     });
+
+
+    //==================== axios ======================
+    axios.get('http://localhost:3000/menu')             // получаем данные с нашей БД
         .then(data => {
-            data.forEach(({ img, altimg, title, descr, price }) => {
+            data.data.forEach(({ img, altimg, title, descr, price }) => {                            // формируем карточки на странице
                 new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
             });
         });
