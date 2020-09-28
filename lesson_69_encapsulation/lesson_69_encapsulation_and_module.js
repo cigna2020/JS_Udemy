@@ -71,14 +71,43 @@
 // ivan.say();         // в этом методе surname будет Tsyhan
 // console.log(ivan.surname);  // surname - underfined, так как пытаемся из вне
 
-const user = (function () {
-    const privat = function () {
-        console.log('I am privat!');
-    };
 
-    return {
-        sayHello: privat            // Нужно возвращать именно, как метод, иначе нет доступа
-    };
-}());
+//  ============== MODULE ==============
 
-user.sayHello();
+// const user = (function () {
+//     const privat = function () {
+//         console.log('I am privat!');
+//     };
+
+//     return {
+//         sayHello: privat            // Нужно возвращать именно, как метод, иначе нет доступа
+//     };
+// }());
+
+// user.sayHello();
+
+
+//  ============== MODULE CommonJS ==============
+
+// function myModule() {
+//     this.hello = function () {
+//         console.log('hello');
+//     };
+
+//     this.goodbye = function () {
+//         console.log('bye');
+//     };
+// }
+
+// //  чтобы экспортировать в другой файл js:
+// module.exports = myModule;
+
+
+//НОВЫЙ ФАЙЛ js
+// чтобы импортировать в другом файле js нужно прописать:
+// const newModule = require('./lesson_69_encapsulation_and_module.js');    // Обязательно прогнать через сборщик модулей, иначе будет ошибка в браузере!!!!
+
+// const myModuleExample = new newModule();
+
+// myModuleExample.hello();
+// myModuleExample.goodbye();
