@@ -162,4 +162,4 @@ function slider({ container, slide, nextArrow, prevArrow, totalCounter, currentC
 
 }
 
-module.exports = slider;
+export default slider;
