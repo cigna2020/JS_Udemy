@@ -22,3 +22,5 @@ yarn-debug.log*
 yarn-error.log*
 
 webpack-demo/
+
+lesson_78_JQuery/node_modules/
